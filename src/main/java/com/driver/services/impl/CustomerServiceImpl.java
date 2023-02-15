@@ -65,14 +65,14 @@ public class CustomerServiceImpl implements CustomerService {
 		Customer customer = customerRepository2.findById(customerId).get();
 
 		tripBooking.setCustomer(customer);
-		tripBooking.setDrivers(driver);
+		tripBooking.setDriver(driver);
 		driver.getCab().setAvailable(Boolean.FALSE);
 		tripBooking.setBill(driver.getCab().getPerKmRate() * distanceInKm);
 		tripBooking.setFromLocation(fromLocation);
 		tripBooking.setToLocation(toLocation);
 		tripBooking.setDistanceInKm(distanceInKm);
 
-		tripBooking.setTripStatus(TripStatus.CONFIRMED);
+		tripBooking.setStatus(TripStatus.CONFIRMED);
 
 		//Set bidirectional mapping
 		customer.getTripBookingList().add(tripBooking);
@@ -87,9 +87,9 @@ public class CustomerServiceImpl implements CustomerService {
 	public void cancelTrip(Integer tripId){
 		//Cancel the trip having given trip Id and update TripBooking attributes accordingly
 		TripBooking tripBooking = tripBookingRepository2.findById(tripId).get();
-		tripBooking.setTripStatus(TripStatus.CANCELED);
+		tripBooking.setStatus(TripStatus.CANCELED);
 		tripBooking.setBill(0);
-		tripBooking.getDrivers().getCab().setAvailable(Boolean.TRUE);
+		tripBooking.getDriver().getCab().setAvailable(Boolean.TRUE);
 		tripBookingRepository2.save(tripBooking);
 
 	}
@@ -98,10 +98,10 @@ public class CustomerServiceImpl implements CustomerService {
 	public void completeTrip(Integer tripId){
 		//Complete the trip having given trip Id and update TripBooking attributes accordingly
 		TripBooking tripBooking = tripBookingRepository2.findById(tripId).get();
-		tripBooking.setTripStatus(TripStatus.COMPLETED);
-		int bill = tripBooking.getDrivers().getCab().getPerKmRate()*tripBooking.getDistanceInKm();
+		tripBooking.setStatus(TripStatus.COMPLETED);
+		int bill = tripBooking.getDriver().getCab().getPerKmRate()*tripBooking.getDistanceInKm();
 		tripBooking.setBill(bill);
-		tripBooking.getDrivers().getCab().setAvailable(Boolean.TRUE);
+		tripBooking.getDriver().getCab().setAvailable(Boolean.TRUE);
 		tripBookingRepository2.save(tripBooking);
 	}
 }

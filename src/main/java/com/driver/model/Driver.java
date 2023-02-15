@@ -9,7 +9,7 @@ import java.util.List;
 public class Driver {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int driverId;
 
     private String mobile;
@@ -19,7 +19,7 @@ public class Driver {
     @OneToOne(mappedBy = "driver", cascade = CascadeType.ALL)
     private Cab cab;
 
-    @OneToOne(mappedBy = "drivers", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "drivers", cascade = CascadeType.ALL)
     private List<TripBooking> tripBooking = new ArrayList<>();
 
     public Driver() {
@@ -72,4 +72,5 @@ public class Driver {
     public void setTripBooking(List<TripBooking> tripBooking) {
         this.tripBooking = tripBooking;
     }
+
 }
